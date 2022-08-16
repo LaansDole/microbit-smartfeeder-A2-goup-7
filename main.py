@@ -1,6 +1,6 @@
 def isCatNotHere():
     global catNotHere
-    if pins.analog_read_pin(AnalogPin.P0) > 500:
+    if pins.analog_read_pin(AnalogPin.P0) < 500:
         basic.show_leds("""
             # . . . #
                         # # . # #
@@ -21,7 +21,8 @@ def isCatNotHere():
     return catNotHere
 
 def on_button_pressed_a():
-    global time
+    global numSpin, time
+    numSpin = 6
     time += -1
     if time == 0:
         time = 24
@@ -31,36 +32,44 @@ def on_button_pressed_a():
 input.on_button_pressed(Button.A, on_button_pressed_a)
 
 def changeCompartment():
+    basic.pause(timer)
     if isCatNotHere() and isTrayEmpty():
-        servos.P0.run(100)
+        servos.P1.run(100)
         basic.pause(stop360)
-        servos.P0.run(0)
+        servos.P1.run(0)
     else:
         basic.pause(5000)
         changeCompartment()
 
 def on_button_pressed_ab():
-    global timer, numSpin, stop360
+    global numSpin, timer, stop360
+    numSpin = 0
     timer = time * 1000
     basic.show_number(time)
-    numSpin = 0
-    stop360 = 1161
-    while numSpin != 6:
-        basic.pause(timer)
+    while numSpin < 6:
         changeCompartment()
-        if input.button_is_pressed(Button.AB):
-            break
         if numSpin % 2 == 1:
             stop360 += 1
         else:
             stop360 += -1
         numSpin += 1
         basic.show_number(numSpin)
-    basic.show_number(time)
+    while True:
+        basic.show_leds("""
+            # # # # #
+                        # # # # #
+                        # # # # #
+                        # # # # #
+                        # # # # #
+        """)
+        basic.pause(200)
+        basic.clear_screen()
+        basic.pause(200)
 input.on_button_pressed(Button.AB, on_button_pressed_ab)
 
 def on_button_pressed_b():
-    global time
+    global numSpin, time
+    numSpin = 6
     time += 1
     if time > 24:
         time = 1
@@ -70,14 +79,21 @@ def on_button_pressed_b():
 input.on_button_pressed(Button.B, on_button_pressed_b)
 
 def isTrayEmpty():
-    global isEmpty
-    isEmpty = True
+    global Distance, isEmpty
+    Distance = sonar.ping(DigitalPin.P2, DigitalPin.P1, PingUnit.CENTIMETERS)
+    basic.show_number(Distance)
+    basic.pause(100)
+    if Distance <= 19:
+        isEmpty = False
+    else:
+        isEmpty = True
     return isEmpty
 isEmpty = False
-numSpin = 0
+Distance = 0
 timer = 0
-stop360 = 0
+numSpin = 0
 catNotHere = False
+stop360 = 0
 time = 0
 basic.show_string("HELLO")
 basic.show_leds("""
@@ -101,5 +117,17 @@ basic.show_leds("""
         . # . . .
         # . . . .
 """)
+basic.clear_screen()
+basic.pause(200)
+basic.show_leds("""
+    # # # # #
+        # # # # #
+        # # # # #
+        # # # # #
+        # # # # #
+""")
+basic.clear_screen()
+basic.pause(200)
 time = 1
 basic.show_number(time)
+stop360 = 279

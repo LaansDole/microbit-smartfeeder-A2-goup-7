@@ -79,10 +79,22 @@ input.onButtonPressed(Button.B, function () {
     }
 })
 function isTrayEmpty () {
-    isEmpty = true
+    Distance = sonar.ping(
+    DigitalPin.P2,
+    DigitalPin.P5,
+    PingUnit.Centimeters
+    )
+    basic.showNumber(Distance)
+    basic.pause(100)
+    if (Distance <= 12) {
+        isEmpty = false
+    } else {
+        isEmpty = true
+    }
     return isEmpty
 }
 let isEmpty = false
+let Distance = 0
 let timer = 0
 let numSpin = 0
 let catNotHere = false
