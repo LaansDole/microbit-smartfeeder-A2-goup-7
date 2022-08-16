@@ -4,12 +4,16 @@
     "dependencies": {
         "core": "*",
         "radio": "*",
-        "microphone": "*"
+        "microphone": "*",
+        "pxt-sonar": "github:microsoft/pxt-sonar#v0.0.5",
+        "servo": "*",
+        "pxt-esp8266_thingspeak": "github:alankrantas/pxt-esp8266_thingspeak#v0.0.3"
     },
     "files": [
         "main.blocks",
         "main.ts",
-        "README.md"
+        "README.md",
+        "main.py"
     ],
     "testFiles": [
         "test.ts"
