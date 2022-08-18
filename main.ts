@@ -45,6 +45,7 @@ input.onButtonPressed(Button.AB, function () {
     numSpin = 0
     timer = time * 1000
     basic.showNumber(time)
+    basic.pause(2000)
     while (numSpin < 6) {
         changeCompartment()
         if (numSpin % 2 == 1) {
@@ -84,7 +85,6 @@ function isTrayEmpty () {
     DigitalPin.P5,
     PingUnit.Centimeters
     )
-    basic.showNumber(Distance)
     basic.pause(100)
     if (Distance <= 12) {
         isEmpty = false
