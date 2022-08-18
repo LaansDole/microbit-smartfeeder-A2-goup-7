@@ -37,7 +37,7 @@ function changeCompartment () {
         basic.pause(stop360)
         servos.P1.run(0)
     } else {
-        basic.pause(5000)
+        basic.pause(2000)
         changeCompartment()
     }
 }
@@ -47,14 +47,14 @@ input.onButtonPressed(Button.AB, function () {
     basic.showNumber(time)
     basic.pause(2000)
     while (numSpin < 6) {
-        changeCompartment()
         if (numSpin % 2 == 1) {
             stop360 += 1
         } else {
             stop360 += -1
         }
+        changeCompartment()
         numSpin += 1
-        basic.showNumber(numSpin)
+        basic.showNumber(6 - numSpin)
     }
     while (true) {
         basic.showLeds(`
@@ -82,7 +82,7 @@ input.onButtonPressed(Button.B, function () {
 function isTrayEmpty () {
     Distance = sonar.ping(
     DigitalPin.P2,
-    DigitalPin.P5,
+    DigitalPin.P8,
     PingUnit.Centimeters
     )
     basic.pause(100)
@@ -135,4 +135,4 @@ basic.clearScreen()
 basic.pause(200)
 time = 1
 basic.showNumber(time)
-stop360 = 279
+stop360 = 282

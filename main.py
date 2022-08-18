@@ -1,22 +1,8 @@
 def isCatNotHere():
     global catNotHere
-    if pins.analog_read_pin(AnalogPin.P0) < 500:
-        basic.show_leds("""
-            # . . . #
-                        # # . # #
-                        # # # # #
-                        # . # . #
-                        # # # # #
-        """)
+    if pins.analog_read_pin(AnalogPin.P0) > 500:
         catNotHere = False
     else:
-        basic.show_leds("""
-            . # . # .
-                        # # . # #
-                        # # # # #
-                        # . # . #
-                        . # # # .
-        """)
         catNotHere = True
     return catNotHere
 
@@ -38,7 +24,7 @@ def changeCompartment():
         basic.pause(stop360)
         servos.P1.run(0)
     else:
-        basic.pause(5000)
+        basic.pause(2000)
         changeCompartment()
 
 def on_button_pressed_ab():
@@ -46,14 +32,22 @@ def on_button_pressed_ab():
     numSpin = 0
     timer = time * 1000
     basic.show_number(time)
+    basic.pause(2000)
+    basic.show_leds("""
+        # # # # #
+                # . . . .
+                . . . . .
+                . . . . .
+                . . . . .
+    """)
     while numSpin < 6:
-        changeCompartment()
         if numSpin % 2 == 1:
             stop360 += 1
         else:
             stop360 += -1
+        changeCompartment()
+        led.unplot(numSpin, 0)
         numSpin += 1
-        basic.show_number(numSpin)
     while True:
         basic.show_leds("""
             # # # # #
@@ -80,10 +74,9 @@ input.on_button_pressed(Button.B, on_button_pressed_b)
 
 def isTrayEmpty():
     global Distance, isEmpty
-    Distance = sonar.ping(DigitalPin.P2, DigitalPin.P1, PingUnit.CENTIMETERS)
-    basic.show_number(Distance)
+    Distance = sonar.ping(DigitalPin.P2, DigitalPin.P8, PingUnit.CENTIMETERS)
     basic.pause(100)
-    if Distance <= 19:
+    if Distance <= 12:
         isEmpty = False
     else:
         isEmpty = True
@@ -130,4 +123,4 @@ basic.clear_screen()
 basic.pause(200)
 time = 1
 basic.show_number(time)
-stop360 = 279
+stop360 = 282
