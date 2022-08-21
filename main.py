@@ -1,8 +1,15 @@
 def isCatNotHere():
     global catNotHere
-    if pins.analog_read_pin(AnalogPin.P0) > 500:
+    if pins.analog_read_pin(AnalogPin.P0) < 500:
         catNotHere = False
     else:
+        basic.show_leds("""
+            . # . # .
+                        # # . # #
+                        # # # # #
+                        # . # . #
+                        . # # # .
+        """)
         catNotHere = True
     return catNotHere
 
@@ -24,6 +31,13 @@ def changeCompartment():
         basic.pause(stop360)
         servos.P1.run(0)
     else:
+        basic.show_leds("""
+            # . . . #
+                        # # . # #
+                        # # # # #
+                        # . # . #
+                        # # # # #
+        """)
         basic.pause(2000)
         changeCompartment()
 
@@ -33,21 +47,14 @@ def on_button_pressed_ab():
     timer = time * 1000
     basic.show_number(time)
     basic.pause(2000)
-    basic.show_leds("""
-        # # # # #
-                # . . . .
-                . . . . .
-                . . . . .
-                . . . . .
-    """)
     while numSpin < 6:
         if numSpin % 2 == 1:
             stop360 += 1
         else:
             stop360 += -1
         changeCompartment()
-        led.unplot(numSpin, 0)
         numSpin += 1
+        basic.show_number(6 - numSpin)
     while True:
         basic.show_leds("""
             # # # # #
@@ -123,4 +130,4 @@ basic.clear_screen()
 basic.pause(200)
 time = 1
 basic.show_number(time)
-stop360 = 282
+stop360 = 283

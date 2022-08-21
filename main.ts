@@ -1,26 +1,23 @@
-function isCatNotHere () {
+function isCatNotHere(): boolean {
+    
     if (pins.analogReadPin(AnalogPin.P0) < 500) {
-        basic.showLeds(`
-            # . . . #
-            # # . # #
-            # # # # #
-            # . # . #
-            # # # # #
-            `)
         catNotHere = false
     } else {
         basic.showLeds(`
             . # . # .
-            # # . # #
-            # # # # #
-            # . # . #
-            . # # # .
-            `)
+                        # # . # #
+                        # # # # #
+                        # . # . #
+                        . # # # .
+        `)
         catNotHere = true
     }
+    
     return catNotHere
 }
-input.onButtonPressed(Button.A, function () {
+
+input.onButtonPressed(Button.A, function on_button_pressed_a() {
+    
     numSpin = 6
     time += -1
     if (time == 0) {
@@ -29,19 +26,30 @@ input.onButtonPressed(Button.A, function () {
     } else {
         basic.showNumber(time)
     }
+    
 })
-function changeCompartment () {
+function changeCompartment() {
     basic.pause(timer)
     if (isCatNotHere() && isTrayEmpty()) {
         servos.P1.run(100)
         basic.pause(stop360)
         servos.P1.run(0)
     } else {
+        basic.showLeds(`
+            # . . . #
+                        # # . # #
+                        # # # # #
+                        # . # . #
+                        # # # # #
+        `)
         basic.pause(2000)
         changeCompartment()
     }
+    
 }
-input.onButtonPressed(Button.AB, function () {
+
+input.onButtonPressed(Button.AB, function on_button_pressed_ab() {
+    
     numSpin = 0
     timer = time * 1000
     basic.showNumber(time)
@@ -52,6 +60,7 @@ input.onButtonPressed(Button.AB, function () {
         } else {
             stop360 += -1
         }
+        
         changeCompartment()
         numSpin += 1
         basic.showNumber(6 - numSpin)
@@ -59,17 +68,18 @@ input.onButtonPressed(Button.AB, function () {
     while (true) {
         basic.showLeds(`
             # # # # #
-            # # # # #
-            # # # # #
-            # # # # #
-            # # # # #
-            `)
+                        # # # # #
+                        # # # # #
+                        # # # # #
+                        # # # # #
+        `)
         basic.pause(200)
         basic.clearScreen()
         basic.pause(200)
     }
 })
-input.onButtonPressed(Button.B, function () {
+input.onButtonPressed(Button.B, function on_button_pressed_b() {
+    
     numSpin = 6
     time += 1
     if (time > 24) {
@@ -78,21 +88,21 @@ input.onButtonPressed(Button.B, function () {
     } else {
         basic.showNumber(time)
     }
+    
 })
-function isTrayEmpty () {
-    Distance = sonar.ping(
-    DigitalPin.P2,
-    DigitalPin.P8,
-    PingUnit.Centimeters
-    )
+function isTrayEmpty(): boolean {
+    
+    Distance = sonar.ping(DigitalPin.P2, DigitalPin.P8, PingUnit.Centimeters)
     basic.pause(100)
     if (Distance <= 12) {
         isEmpty = false
     } else {
         isEmpty = true
     }
+    
     return isEmpty
 }
+
 let isEmpty = false
 let Distance = 0
 let timer = 0
@@ -103,36 +113,36 @@ let time = 0
 basic.showString("HELLO")
 basic.showLeds(`
     . # # . .
-    # . . # .
-    # # # # .
-    # . . # .
-    # . . # .
-    `)
+        # . . # .
+        # # # # .
+        # . . # .
+        # . . # .
+`)
 basic.showLeds(`
     # # # . .
-    . . . # .
-    . # # . .
-    # . . . .
-    # # # # .
-    `)
+        . . . # .
+        . # # . .
+        # . . . .
+        # # # # .
+`)
 basic.showLeds(`
     # # # # .
-    . . . # .
-    . . # . .
-    . # . . .
-    # . . . .
-    `)
+        . . . # .
+        . . # . .
+        . # . . .
+        # . . . .
+`)
 basic.clearScreen()
 basic.pause(200)
 basic.showLeds(`
     # # # # #
-    # # # # #
-    # # # # #
-    # # # # #
-    # # # # #
-    `)
+        # # # # #
+        # # # # #
+        # # # # #
+        # # # # #
+`)
 basic.clearScreen()
 basic.pause(200)
 time = 1
 basic.showNumber(time)
-stop360 = 282
+stop360 = 283
